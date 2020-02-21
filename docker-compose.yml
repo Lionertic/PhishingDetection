@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     image: lionertic/phishingDetection:init
-    container_name: app
+    container_name: AppServer
     restart: unless-stopped
     tty: true
     environment:
@@ -22,7 +22,7 @@ services:
   #Nginx Service
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: NginxServer
     restart: always
     tty: true
     ports:
