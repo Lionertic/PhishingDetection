@@ -1,0 +1,110 @@
+version: '3'
+services:
+
+  # Laravel App
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: lionertic/phishingDetection:init
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - mynet
+
+  #Nginx Service
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./nginx/:/etc/nginx/conf.d/
+    networks:
+      - mynet
+
+  #Flask Service
+  Flasks:
+    build:
+      context: ./
+      dockerfile: ./Flasks/Dockerfile
+    image: lionertic/phishingDetecter:init
+    container_name: Flasks
+    restart: always
+    working_dir: /usr/src/app
+    volumes:
+      - ./Flasks:/usr/src/app
+    ports:
+      - 8001:80
+    networks:
+      - mynet
+
+  # #Flask Service
+  # flask:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./flask/Dockerfile
+  #   image: lionertic/machine:init
+  #   container_name: flask
+  #   restart: always
+  #   working_dir: /var/www/apache-flask/app/
+  #   volumes:
+  #     - ./flask/app:/var/www/apache-flask/app/
+  #   expose:
+  #     - 80
+  #   networks:
+  #     - mynet
+
+  #MySQL Service
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: newChat
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - chatdata:/var/lib/mysql/
+    networks:
+      - mynet
+
+  #PhpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8183:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    volumes:
+      - /sessions
+    networks:
+      - mynet
+
+#Docker Networks
+networks:
+  mynet:
+    driver: bridge
+#Volumes
+volumes:
+  chatdata:
+    driver: local
