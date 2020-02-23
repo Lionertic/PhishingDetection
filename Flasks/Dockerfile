@@ -1,19 +1,21 @@
-FROM ubuntu:16.04
+FROM python:3.9.0a3-alpine3.10
 
-# MAINTANER Your Name "youremail@domain.tld"
+LABEL maintainer="Lionertic"
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
-
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./Flasks/requirements.txt /app/requirements.txt
-
+RUN apk --update add wget gcc g++ firefox-esr lapack-dev gfortran musl-dev
+    
 WORKDIR /app
+
+COPY . /app
+
+RUN chmod +x geckodriver
+
+RUN cp geckodriver /usr/local/bin
 
 RUN pip install -r requirements.txt
 
-COPY ./Flasks /app
+RUN rm -rf /var/cache/apk/*
 
-ENTRYPOINT [ "python" ]
+# ENTRYPOINT [ "python" ]
 
-CMD [ "api.py" ]
+# CMD [ "api.py" ]

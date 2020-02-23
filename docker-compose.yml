@@ -2,11 +2,11 @@ version: '3'
 services:
 
   # Laravel App
-  app:
+  AppServer:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: lionertic/phishingDetection:init
+    image: lionertic/phishingdetection:init
     container_name: AppServer
     restart: unless-stopped
     tty: true
@@ -20,7 +20,7 @@ services:
       - mynet
 
   #Nginx Service
-  nginx:
+  NginxServer:
     image: nginx:latest
     container_name: NginxServer
     restart: always
@@ -34,20 +34,20 @@ services:
       - mynet
 
   #Flask Service
-  Flasks:
-    build:
-      context: ./
-      dockerfile: ./Flasks/Dockerfile
-    image: lionertic/phishingDetecter:init
-    container_name: Flasks
-    restart: always
-    working_dir: /usr/src/app
-    volumes:
-      - ./Flasks:/usr/src/app
-    ports:
-      - 8001:80
-    networks:
-      - mynet
+  # Flasks:
+  #   build:
+  #     context: ./Flasks
+  #     dockerfile: ./Dockerfile
+  #   image: lionertic/phishingdetecter:init
+  #   container_name: Flasks
+  #   restart: always
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  #   expose:
+  #     - 80
+  #   networks:
+  #     - mynet
 
   # #Flask Service
   # flask:
@@ -66,9 +66,9 @@ services:
   #     - mynet
 
   #MySQL Service
-  db:
+  urls:
     image: mysql:5.7
-    container_name: db
+    container_name: urls
     restart: unless-stopped
     tty: true
     expose:
@@ -79,7 +79,7 @@ services:
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - chatdata:/var/lib/mysql/
+      - urldata:/var/lib/mysql/
     networks:
       - mynet
 
@@ -89,14 +89,14 @@ services:
     container_name: phpmyadmin
     restart: always
     depends_on:
-      - db
+      - urls
     ports:
       - "8183:80"
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
     volumes:
-      - /sessions
+      - /session
     networks:
       - mynet
 
@@ -106,5 +106,5 @@ networks:
     driver: bridge
 #Volumes
 volumes:
-  chatdata:
+  urldata:
     driver: local

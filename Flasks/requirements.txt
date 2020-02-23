@@ -1,2 +1,13 @@
-Flask==0.12
-flask-restful==0.3.5
+# flask
+# flask-restful
+# requests
+# # Pillow==2.2.1
+# # matplotlib
+# # Cython
+# # scikit-learn
+# seaborn
+# regex
+# tldextract
+# bs4
+# whois
+# favicon
