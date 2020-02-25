@@ -34,20 +34,20 @@ services:
       - mynet
 
   #Flask Service
-  # Flasks:
-  #   build:
-  #     context: ./Flasks
-  #     dockerfile: ./Dockerfile
-  #   image: lionertic/phishingdetecter:init
-  #   container_name: Flasks
-  #   restart: always
-  #   working_dir: /app
-  #   volumes:
-  #     - ./:/app
-  #   expose:
-  #     - 80
-  #   networks:
-  #     - mynet
+  Flasks:
+    build:
+      context: ./Flasks
+      dockerfile: ./Dockerfile
+    image: lionertic/phishingdetecter:init
+    container_name: Flasks
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./Flasks:/app
+    expose:
+      - 80
+    networks:
+      - mynet
 
   # #Flask Service
   # flask:
@@ -74,7 +74,7 @@ services:
     expose:
       - 3306
     environment:
-      MYSQL_DATABASE: newChat
+      MYSQL_DATABASE: urls
       MYSQL_USER: admin
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
@@ -93,7 +93,7 @@ services:
     ports:
       - "8183:80"
     environment:
-      - PMA_HOST=db
+      - PMA_HOST=urls
       - PMA_PORT=3306
     volumes:
       - /session

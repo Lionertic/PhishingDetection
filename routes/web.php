@@ -14,3 +14,23 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/fillUrls', function() {
+    $file = Storage::disk('local')->get('feed.txt');
+    $urls = explode("\n",$file);
+
+    foreach ($urls as $url){
+        $parsedUrl = parse_url($url);
+        if (key_exists("host",$parsedUrl)) {
+            $host = $parsedUrl['host'];
+            $domain = App\Url::where('url', $host)->firstOrFail();
+            if ( $domain ) {
+                $domain = new App\Url();
+                $domain->url = $host;
+                $domain->save();
+            }
+        }
+    }
+
+    return response()->json(['status_code' => 200, 'message' => 'Done Inserting']);
+});

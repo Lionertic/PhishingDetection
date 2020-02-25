@@ -1,13 +1,13 @@
-# flask
-# flask-restful
-# requests
-# # Pillow==2.2.1
-# # matplotlib
-# # Cython
-# # scikit-learn
-# seaborn
-# regex
-# tldextract
-# bs4
-# whois
-# favicon
+flask
+flask-restful
+requests
+Pillow
+matplotlib
+Cython
+scikit-learn
+seaborn
+regex
+tldextract
+bs4
+whois
+favicon
