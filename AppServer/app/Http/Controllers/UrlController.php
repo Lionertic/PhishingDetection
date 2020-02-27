@@ -18,25 +18,21 @@ class UrlController extends Controller
             if (key_exists("host",$parsedUrl)) {
                 $host = $parsedUrl['host'];
                 $domain =  Url::where('url',$host)->first();
-            
+
                 if ( $domain ) {
                     return response()->json([ 'status' => 201, 'message' => 'It is Phishing url' ]);
                 } else {
-                    // $client = new GuzzleHttp\Client();
-                    // $res = $client->get("Flasks:80/");
-                    
-                    // dd(json_decode($res->getBody()->getContents()));
-                    // echo $res->getStatusCode();
-                    // // "200"
-                    // echo $res->getHeader('content-type')[0];
-                    // // 'application/json; charset=utf8'
-                    // // echo ;
-                    return response()->json([ 'status' => 200, 'message' => 'good' ]);;
+                     $client = new \GuzzleHttp\Client();
+                     $res = $client->get("flask:80/");
+
+                     $responseJson = $res->getBody()->getContents();
+
+                    return response()->json($responseJson);
                 }
 
             }
         } else {
-            return response()->json([ 'status' => 201, 'message' => 'bad url '.$url ]);
+            return response()->json([ 'status' => 400, 'message' => 'bad url '.$url ]);
         }
 
     }
@@ -44,7 +40,7 @@ class UrlController extends Controller
     public function fillUrls () {
         $file = Storage::disk('local')->get('feed.txt');
         $urls = explode("\n",$file);
-    
+
         foreach ($urls as $url){
             $parsedUrl = parse_url($url);
             if (key_exists("host",$parsedUrl)) {
@@ -57,7 +53,7 @@ class UrlController extends Controller
                 }
             }
         }
-    
+
         return response()->json(['status_code' => 200, 'message' => 'Done Inserting']);
     }
 
@@ -67,7 +63,7 @@ class UrlController extends Controller
         foreach ( $urls as $url) {
             array_push($list,$url->url);
         }
-        
+
         return view('list', ['urls' => $list] );
     }
 }

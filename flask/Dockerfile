@@ -1,35 +1,24 @@
-FROM debian:latest
+FROM ubuntu:latest
 
 LABEL maintainer="Lionertic"
 
-RUN apt-get update && apt-get install -y apache2 \
-    libapache2-mod-wsgi \
-    build-essential \
-    python \
-    python-dev\
-    python-pip \
-    vim \
- && apt-get clean \
- && apt-get autoremove \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get -y install python3 wget gcc g++ firefox sudo apt python3-pip
 
-COPY ./flask/app/requirements.txt /var/www/apache-flask/app/requirements.txt
-RUN pip install -r /var/www/apache-flask/app/requirements.txt
+COPY . /app
 
-COPY ./flask/apache-flask.conf /etc/apache2/sites-available/apache-flask.conf
-RUN a2ensite apache-flask
-RUN a2enmod headers
+WORKDIR /app
 
-COPY ./flask/apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
+RUN chmod +x geckodriver
 
-COPY ./flask/run.py /var/www/apache-flask/run.py
-COPY ./flask/app /var/www/apache-flask/app/
+RUN cp geckodriver /usr/local/bin
 
-RUN a2dissite 000-default.conf
-RUN a2ensite apache-flask.conf
+RUN pip3 install --upgrade pip
 
-EXPOSE 80
+RUN pip3 install -r requirements.txt
 
-WORKDIR /var/www/apache-flask
+RUN rm -rf /var/cache/apk/*
 
-CMD  /usr/sbin/apache2ctl -D FOREGROUND
+ENTRYPOINT ["python3"]
+
+CMD ["api.py"]

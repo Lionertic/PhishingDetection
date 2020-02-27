@@ -86,7 +86,6 @@
     function check(){
         var url = $("input").val();
         url = url.replace(".","%2E");
-        console.log(url)
         $.get("/api/check", { url: url }, function( data, status ) {
             console.log(data);
         });

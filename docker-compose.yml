@@ -4,7 +4,7 @@ services:
   # Laravel App
   AppServer:
     build:
-      context: ./
+      context: ./AppServer
       dockerfile: Dockerfile
     image: lionertic/phishingdetection:init
     container_name: AppServer
@@ -15,7 +15,7 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www/html
     volumes:
-      - ./:/var/www/html
+      - ./AppServer:/var/www/html
     networks:
       - mynet
 
@@ -28,42 +28,26 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./:/var/www/html
+      - ./AppServer:/var/www/html
       - ./nginx/:/etc/nginx/conf.d/
     networks:
       - mynet
 
   #Flask Service
-  Flasks:
+  flaskz:
     build:
-      context: ./Flasks
-      dockerfile: ./Dockerfile
+      context: ./flask
+      dockerfile: Dockerfile
     image: lionertic/phishingdetecter:init
-    container_name: Flasks
+    container_name: flask
     restart: always
     working_dir: /app
     volumes:
-      - ./Flasks:/app
+      - ./flask:/app
     expose:
       - 80
     networks:
       - mynet
-
-  # #Flask Service
-  # flask:
-  #   build:
-  #     context: ./
-  #     dockerfile: ./flask/Dockerfile
-  #   image: lionertic/machine:init
-  #   container_name: flask
-  #   restart: always
-  #   working_dir: /var/www/apache-flask/app/
-  #   volumes:
-  #     - ./flask/app:/var/www/apache-flask/app/
-  #   expose:
-  #     - 80
-  #   networks:
-  #     - mynet
 
   #MySQL Service
   urls:
