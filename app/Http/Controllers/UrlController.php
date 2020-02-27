@@ -20,7 +20,7 @@ class UrlController extends Controller
                 $domain =  Url::where('url',$host)->first();
             
                 if ( $domain ) {
-                    return response()->json([ 'status' => 200, 'message' => 'It is Phishing url' ]);
+                    return response()->json([ 'status' => 201, 'message' => 'It is Phishing url' ]);
                 } else {
                     // $client = new GuzzleHttp\Client();
                     // $res = $client->get("Flasks:80/");
@@ -31,12 +31,12 @@ class UrlController extends Controller
                     // echo $res->getHeader('content-type')[0];
                     // // 'application/json; charset=utf8'
                     // // echo ;
-                    return "good";
+                    return response()->json([ 'status' => 200, 'message' => 'good' ]);;
                 }
 
             }
         } else {
-            return response()->json([ 'status' => 200, 'message' => 'bade url' ]);
+            return response()->json([ 'status' => 201, 'message' => 'bad url '.$url ]);
         }
 
     }
