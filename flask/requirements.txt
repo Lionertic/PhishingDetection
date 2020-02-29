@@ -11,3 +11,5 @@ tldextract
 bs4
 whois
 favicon
+dnspython
+validators

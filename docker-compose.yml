@@ -4,9 +4,9 @@ services:
   # Laravel App
   AppServer:
     build:
-      context: ./AppServer
-      dockerfile: Dockerfile
-    image: lionertic/phishingdetection:init
+      context: ./
+      dockerfile: ./AppServer/Dockerfile
+    image: laravel-server:init
     container_name: AppServer
     restart: unless-stopped
     tty: true
@@ -15,9 +15,11 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www/html
     volumes:
-      - ./AppServer:/var/www/html
+      - ./:/var/www/html
     networks:
-      - mynet
+      - serverConnector
+      - flaskConnector
+      - dbConnector
 
   #Nginx Service
   NginxServer:
@@ -28,44 +30,44 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./AppServer:/var/www/html
+      - ./:/var/www/html
       - ./nginx/:/etc/nginx/conf.d/
     networks:
-      - mynet
+      - serverConnector
 
   #Flask Service
-  flaskz:
+  flask:
     build:
-      context: ./flask
-      dockerfile: Dockerfile
-    image: lionertic/phishingdetecter:init
+      context: ./
+      dockerfile: ./flask/Dockerfile
+    image: flask-ml-server:init
     container_name: flask
     restart: always
-    working_dir: /app
+    working_dir: /usr/src/flask
     volumes:
-      - ./flask:/app
+      - ./:/usr/src/
     expose:
       - 80
     networks:
-      - mynet
+      - flaskConnector
 
   #MySQL Service
   urls:
     image: mysql:5.7
-    container_name: urls
+    container_name: db
     restart: unless-stopped
     tty: true
     expose:
       - 3306
     environment:
-      MYSQL_DATABASE: urls
+      MYSQL_DATABASE: PhishingDetection
       MYSQL_USER: admin
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - urldata:/var/lib/mysql/
+      - phishingData:/var/lib/mysql/
     networks:
-      - mynet
+      - dbConnector
 
   #PhpMyAdmin Service
   phpmyadmin:
@@ -77,18 +79,22 @@ services:
     ports:
       - "8183:80"
     environment:
-      - PMA_HOST=urls
+      - PMA_HOST=db
       - PMA_PORT=3306
     volumes:
       - /session
     networks:
-      - mynet
+      - dbConnector
 
 #Docker Networks
 networks:
-  mynet:
+  dbConnector:
+    driver: bridge
+  flaskConnector:
+    driver: bridge
+  serverConnector:
     driver: bridge
 #Volumes
 volumes:
-  urldata:
+  phishingData:
     driver: local

@@ -3,15 +3,15 @@ FROM ubuntu:latest
 LABEL maintainer="Lionertic"
 
 RUN apt-get update && \
-    apt-get -y install python3 wget gcc g++ firefox sudo apt python3-pip
+    apt-get -y install python3 wget gcc g++ firefox sudo apt python3-pip whois
 
-COPY . /app
+COPY . /usr/src
 
-WORKDIR /app
+WORKDIR /usr/src/flask
 
-RUN chmod +x geckodriver
+RUN chmod +x /usr/src/flask/geckodriver
 
-RUN cp geckodriver /usr/local/bin
+RUN cp /usr/src/flask/geckodriver /usr/local/bin
 
 RUN pip3 install --upgrade pip
 

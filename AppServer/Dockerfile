@@ -2,9 +2,9 @@ FROM php:7.4.3-fpm-alpine
 
 LABEL maintainer="Lionertic"
 
-WORKDIR /var/www/html
-
 COPY . /var/www/html/
+
+WORKDIR /var/www/html/AppServer
 
 RUN apk --update add curl git oniguruma-dev
 
