@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/view', 'UrlController@view');
+
 Route::post('/fillUrls', "UrlController@fillUrls");
+
+Route::get('/getUrlList', "UrlController@getUrls");

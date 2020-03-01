@@ -562,6 +562,3 @@ def process(url):
             isLinks,
             isGoodStatistical,
         ]]
-
-
-print(process("https://www.google.com/"))

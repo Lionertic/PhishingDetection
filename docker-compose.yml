@@ -13,7 +13,7 @@ services:
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-    working_dir: /var/www/html
+    working_dir: /var/www/html/AppServer
     volumes:
       - ./:/var/www/html
     networks:

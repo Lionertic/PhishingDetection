@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUrlsTable extends Migration
+class CreateTableUserFeedback extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateUrlsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Urls', function (Blueprint $table) {
+        Schema::create('UserFeedback', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('url', 500)->unique();
-            $table->boolean('isGood');
+            $table->tinyInteger('feedback');
             $table->timestamps();
+            $table->foreign("url")->references("url")->on("Urls")->onDelete("cascade");
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -28,6 +31,6 @@ class CreateUrlsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('urls');
+        Schema::dropIfExists('table_user_feedback');
     }
 }

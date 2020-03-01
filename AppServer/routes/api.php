@@ -1,5 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
+Route::get('/check', 'UrlController@check');
 
-Route::get('/check','UrlController@check');
+Route::put("/feedback", "UrlController@feedback");
