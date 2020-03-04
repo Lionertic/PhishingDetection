@@ -6,10 +6,8 @@ api = Api(app)
 
 class Observatory(Resource):
     def get(self):
-        return {
-            'Galaxies': ['Milkyway', 'Andromeda',
-            'Large Magellanic Cloud (LMC)']
-        }
+       data = {'message': 'Its good url'}
+       return data ,200
 
 api.add_resource(Observatory, '/')
 

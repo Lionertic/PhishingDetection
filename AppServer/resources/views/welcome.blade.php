@@ -38,12 +38,6 @@
                 position: relative;
             }
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
             .content {
                 text-align: center;
             }
@@ -68,27 +62,27 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    Detect Phishing
-                </div>
-                <div class="links">
-                    <label for="exampleInputEmail1">URL</label>
-                    <input type="text" class="form-control" id="urlInput" placeholder="https://www.google.com/">
-                    <button onclick="check();">CHECK</button>
-                    <button ><a href="/view">Show Detected URLS</a></button>
-                </div>
+    <div class="flex-center position-ref full-height">
+        <div class="content">
+            <div class="title m-b-md">
+                Detect Phishing
+            </div>
+            <div class="links">
+                <label for="exampleInputEmail1">URL</label>
+                <input label="url" type="text" class="form-control" id="urlInput" placeholder="https://www.google.com/">
+                <button onclick="check();">CHECK</button>
             </div>
         </div>
+    </div>
     </body>
     <script>
-    function check(){
-        var url = $("input").val();
-        url = url.replace(".","%2E");
-        $.get("/api/check", { url: url }, function( data, status ) {
-            console.log(data);
-        });
-    }
+        function check() {
+            var url = $("input").val();
+            url = url.replace(".", "%2E");
+            $.get("/api/check", {url: url}, function (data, status) {
+                if (status === 200)
+                    console.log(data);
+            });
+        }
     </script>
 </html>

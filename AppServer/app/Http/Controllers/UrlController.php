@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Url;
 use App\UserFeedback;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,22 +24,25 @@ class UrlController extends Controller
                 $host = $parsedUrl['host'];
                 $domain =  Url::where('url',$host)->first();
 
-                if ( $domain ) {
-                    return response()->json([ 'status' => 201, 'message' => 'It is Phishing url' ]);
+                if ($domain) {
+                    return response()->json(['message' => 'It is Phishing url'], 200);
                 } else {
-                    $client = new Client();
-                    $res = $client->get("flask:80/");
+                    try {
+                        $client = new Client();
+                        $res = $client->get("flask:80/");
+                        $responseJson = json_decode($res->getBody()->getContents());
+                        return response()->json($responseJson, 200);
 
-                     $responseJson = $res->getBody()->getContents();
-
-                    return response()->json($responseJson);
+                    } catch (ClientException $exception) {
+                        return response()->json(['message' => 'Flask error'], 500);
+                    }
                 }
-
+            } else {
+                return response()->json(['message' => 'bad url ' . $url], 400);
             }
         } else {
-            return response()->json(['status' => 400, 'message' => 'bad url ' . $url]);
+            return response()->json(['message' => 'bad url ' . $url], 400);
         }
-
     }
 
     public function getUrls()
@@ -49,7 +53,7 @@ class UrlController extends Controller
         $urlList = $res->getBody()->getContents();
         Storage::disk('local')->put('feed.txt', $urlList);
 
-        return response()->json(['status' => 200, 'message' => 'Success getting the list']);
+        return response()->json(['message' => 'Success getting the list'], 200);
     }
 
     public function fillUrls()
@@ -71,19 +75,9 @@ class UrlController extends Controller
             }
         }
 
-        return response()->json(['status_code' => 200, 'message' => 'Done Inserting']);
+        return response()->json(['message' => 'Done Inserting'], 200);
     }
 
-    public function view()
-    {
-        $urls = Url::get();
-        $list = [];
-        foreach ($urls as $url) {
-            array_push($list, $url->url);
-        }
-
-        return view('list', ['urls' => $list]);
-    }
 
     public function feedback(Request $request)
     {
@@ -112,6 +106,6 @@ class UrlController extends Controller
             }
         }
 
-        return response()->json(['status' => 200, 'message' => 'Thanks for feedback']);
+        return response()->json(['message' => 'Thanks for feedback'], 200);
     }
 }
