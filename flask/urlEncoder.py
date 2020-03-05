@@ -240,14 +240,22 @@ def iframe(soup):
 
 def redirect(resp, url):
     try:
-        redirected = resp.url != url
-        if not redirected:
+        subDomainAfterLoading, domainAfterLoading, suffixAfterLoading = extract(resp.url)
+        fullUrlAfterLoading = subDomainAfterLoading + '.' + domainAfterLoading + '.' + suffixAfterLoading
+
+        subDomainBeforeLoading, domainBeforeLoading, suffixBeforeLoading = extract(url)
+        if(subDomainBeforeLoading == ""):
+            subDomainBeforeLoading = "www"
+        elif (not subDomainBeforeLoading.startswith("www.") and not subDomainBeforeLoading == ""):
+            subDomainBeforeLoading = "www." + subDomainBeforeLoading
+        fullUrlBeforeLoading = subDomainBeforeLoading + '.' + domainBeforeLoading + '.' + suffixBeforeLoading
+
+        if fullUrlAfterLoading == fullUrlBeforeLoading:
             return 1
         else:
             return -1
     except:
         return -1
-
 
 def faviconCheck(url):
     try:
@@ -357,10 +365,11 @@ def sslState(useHttps, url):
             return 0
         else:
             return -1
-    except:
-
+    except Exception as e:
+        # print(e)
         return -1
 
+# print(sslState(1,"https://google.com"))
 
 def pageRank(url):
     try:

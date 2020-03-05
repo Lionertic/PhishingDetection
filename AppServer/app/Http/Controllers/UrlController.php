@@ -29,7 +29,12 @@ class UrlController extends Controller
                 } else {
                     try {
                         $client = new Client();
-                        $res = $client->get("flask:80/");
+                        $params = [
+                            'query' => [
+                               'url' => $url
+                            ]
+                         ];
+                        $res = $client->get("flask:80/",$params);
                         $responseJson = json_decode($res->getBody()->getContents());
                         return response()->json($responseJson, 200);
 
@@ -84,24 +89,56 @@ class UrlController extends Controller
         $url = addScheme($request->url);
         $feedback = $request->feedback;
         $parsedUrl = parse_url($url);
-
+        
         if (key_exists("host", $parsedUrl)) {
             $host = $parsedUrl['host'];
             $domain = UserFeedback::where('url', $host)->first();
             if ($domain) {
                 $domain->feedback += $feedback;
+                $client = new Client();
+                $params = [
+                    'query' => [
+                        'url' => $url,
+                        'loc' => $domain->location,
+                        'feedback' => $domain->feedback
+                    ]
+                ];
+                $res = $client->get("flask/retrain",$params);
                 $urlInfo = $domain->url($host);
                 if ($domain->feedback > 0 && !$urlInfo->isGood) {
                     $urlInfo->isGood = true;
                 } elseif ($domain->feedback < 0 && $urlInfo->isGood) {
                     $urlInfo->isGood = false;
                 }
+                
                 $domain->save();
                 $urlInfo->save();
             } else {
                 $userFeedback = new UserFeedback();
                 $userFeedback->url = $host;
                 $userFeedback->feedback = $feedback;
+                $client = new Client();
+                $params = [
+                    'query' => [
+                        'url' => $url,
+                        'loc' => -1,
+                        'feedback' => $userFeedback->feedback
+                    ]
+                ];
+                $urlInfo = Url::where("url",$host)->first();
+                if ( ! $urlInfo ) {
+                    $urlInfo = new Url();
+                    $urlInfo->url = $host;
+                    if ( $feedback == 1 ) {
+                        $urlInfo->isGood = true;
+                    } else {
+                        $urlInfo->isGood = false;
+                    }
+                    $urlInfo->save();
+                }
+                $res = $client->get("flask/retrain",$params);
+                $location = json_decode($res->getBody()->getContents(),true)["location"];
+                $userFeedback->location = $location;
                 $userFeedback->save();
             }
         }
