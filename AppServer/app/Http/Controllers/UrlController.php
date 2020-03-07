@@ -34,7 +34,7 @@ class UrlController extends Controller
                                'url' => $url
                             ]
                          ];
-                        $res = $client->get("flask:80/",$params);
+                        $res = $client->get("flask:80/check",$params);
                         $responseJson = json_decode($res->getBody()->getContents());
                         return response()->json($responseJson, 200);
 
@@ -87,6 +87,8 @@ class UrlController extends Controller
     public function feedback(Request $request)
     {
         $url = addScheme($request->url);
+        $url = str_replace("%2E", ".", $url);
+
         $feedback = $request->feedback;
         $parsedUrl = parse_url($url);
         

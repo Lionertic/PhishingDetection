@@ -73,6 +73,27 @@
                 <button onclick="check();">CHECK</button>
             </div>
         </div>
+        <!-- Button trigger modal -->
+<button type="button" class="hidden" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="positive" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-primary" id="negative" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
     </body>
     <script>
@@ -80,9 +101,22 @@
             var url = $("input").val();
             url = url.replace(".", "%2E");
             $.get("/api/check", {url: url}, function (data, status) {
-                if (status === 200)
-                    console.log(data);
+                if (status === "success"){
+                    $(".modal-body").html(data.message + "\n Please provide feedback")
+                    $(".hidden").click()
+                }
             });
+        }
+        $("#positive").click(()=>{
+            feedback(1)
+        })
+        $("#negative").click(()=>{
+            feedback(-1)
+        })
+        function feedback(feedback) {
+            var url = $("input").val();
+            url = url.replace(".", "%2E");
+            $.get("/api/feedback", {url: url,feedback:feedback}, function (data, status) {});
         }
     </script>
 </html>

@@ -9,6 +9,6 @@ function isUrl($url) {
             return false;
       }
 }
-function addScheme($url, $scheme = 'https://'){
+function addScheme($url, $scheme = 'http://'){
       return parse_url($url, PHP_URL_SCHEME) === null ? $scheme . $url : $url;
 }

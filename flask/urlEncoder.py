@@ -369,8 +369,6 @@ def sslState(useHttps, url):
         # print(e)
         return -1
 
-# print(sslState(1,"https://google.com"))
-
 def pageRank(url):
     try:
         response = requests.get('https://openpagerank.com/api/v1.0/getPageRank?domains%5B0%5D=' + url,
@@ -467,7 +465,7 @@ def process(url):
         linkTags = isSFH = isMailTo = isAbnormalUrl = isRedirected = \
         isMouseOver = click = isPop = isIframe = domainAge = \
         hasDNSRecord = traffic = goodPageRank = isPageIndexed = \
-        isLinks = isGoodStatistical = 0
+        isLinks = isGoodStatistical = -1
 
     try:
         resp = requests.get(url)
@@ -481,14 +479,18 @@ def process(url):
         hasDoubleSlash = doubleSlash(resp.url)
         containsHyphen = prefixDomain(domain)
         containMoreSubDomain = subDomainCheck(subDomain)
-        isHttps = httpsToken(fullUrl)
+        isRedirected = redirect(resp, url)
+        if ( isRedirected == -1 ) :
+            isHttps = httpsToken(url)
+        else:
+            isHttps = httpsToken(fullUrl)
         inPageRequests = requestUrl(soup, domain)
         anchorUrls = urlOfAnchor(soup, domain)
         linkTags = linksInTags(soup)
         isMailTo = emailSubmit(soup)
         isAbnormalUrl = abnormalUrl(soup, domain)
         isIframe = iframe(soup)
-        isRedirected = redirect(resp, url)
+        
         hasFavIcon = faviconCheck(url)
         domainAge = ageOfDomain(w)
         domainReg = domainRegistration(w)

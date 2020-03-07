@@ -18,10 +18,10 @@ def check():
         model = joblib.load("model.pkl")
         pred = model.predict(val)
 
-        if pred >= 0 :
-            data = {'message': 'Its good url'}
-        else:
+        if pred <= 0 :
             data = {'message': 'Its phishing url'}
+        else:
+            data = {'message': 'Its good url'}
 
         return data ,200
 
