@@ -4,17 +4,22 @@
     "name": "Phishing Detector",
     "description": "This extension will analyze a page using ML",
     "version": "1.0",
-  
+    "icons": { "16": "resources/favicon.png",
+                "48": "resources/favicon.png",
+                "128": "resources/favicon.png" },
     "browser_action": {
-     "default_icon": "icon.png",
-     "default_popup": "popup.html"
+      "default_icon": "resources/favicon.png",
+      "default_popup": "popup.html"
     },
     "permissions": [
         "tabs","<all_urls>","activeTab","webRequest"
      ],
      "background":
      {
-         "scripts": ["jquery.min.js","background.js"]
+       "scripts": [
+         "resources/js/jquery.min.js",
+         "resources/js/background.js"
+       ]
      }
   }
   

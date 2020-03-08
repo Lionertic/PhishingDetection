@@ -1,16 +1,54 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Phishing Detector</title>
-    <script src="jquery.min.js"> </script>
-    <script src="popup.js"></script>
-  </head>
-  <body>
-    <h1 id="url" >Phishing Detector</h1>
-    <input type="text" id="urls">
-    <button id="checkPage">Check this page now!</button>
-    <div>
-      <h2 id="resp"></h2>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+
+  <title>Phishing Detector</title>
+
+  <!-- Fonts -->
+  <!--  <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon"/>-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet">
+  <script src="resources/js/jquery.min.js"></script>
+  <script src="resources/js/bootstrap.min.js"></script>
+  <link href="resources/css/popup.css" rel="stylesheet">
+  <script src="resources/js/popup.js"></script>
+
+</head>
+<body>
+<div class="flex-center position-ref full-height">
+  <div class="content">
+    <div class="title m-b-md">
+      Detect Phishing
     </div>
-  </body>
+    <div class="links">
+      <input class="form-control" id="urlInput" placeholder="https://www.google.com/" type="text"><br>
+      <button id="check" type="submit">Go</button>
+    </div>
+  </div>
+  <!-- Button trigger modal -->
+  <button class=" hidden btn btn-primary btn-lg" data-target="#myModal" data-toggle="modal" type="button"></button>
+
+  <!-- Modal -->
+  <div aria-labelledby="myModalLabel" class="modal fade" id="myModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                  aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss="modal" id="positive" type="button">Yes</button>
+          <button class="btn btn-primary" data-dismiss="modal" id="negative" type="button">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
 </html>

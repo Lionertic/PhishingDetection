@@ -20,21 +20,25 @@ class UrlController extends Controller
 
         if (isUrl($url)) {
             $parsedUrl = parse_url($url);
-            if (key_exists("host",$parsedUrl)) {
+            if (key_exists("host", $parsedUrl)) {
                 $host = $parsedUrl['host'];
-                $domain =  Url::where('url',$host)->first();
+                $domain = Url::where('url', $host)->first();
 
                 if ($domain) {
-                    return response()->json(['message' => 'It is Phishing url'], 200);
+                    if ($domain->isGood) {
+                        return response()->json(['message' => 'Its good url'], 200);
+                    } else {
+                        return response()->json(['message' => 'It is Phishing url'], 200);
+                    }
                 } else {
                     try {
                         $client = new Client();
                         $params = [
                             'query' => [
-                               'url' => $url
+                                'url' => $url
                             ]
-                         ];
-                        $res = $client->get("flask:80/check",$params);
+                        ];
+                        $res = $client->get("flask:80/check", $params);
                         $responseJson = json_decode($res->getBody()->getContents());
                         return response()->json($responseJson, 200);
 
@@ -71,7 +75,7 @@ class UrlController extends Controller
             if (key_exists("host", $parsedUrl)) {
                 $host = $parsedUrl['host'];
                 $domain = Url::where('url', $host)->first();
-                if ( !$domain ) {
+                if (!$domain) {
                     $domain = new Url();
                     $domain->url = $host;
                     $domain->isGood = false;
@@ -91,7 +95,7 @@ class UrlController extends Controller
 
         $feedback = $request->feedback;
         $parsedUrl = parse_url($url);
-        
+
         if (key_exists("host", $parsedUrl)) {
             $host = $parsedUrl['host'];
             $domain = UserFeedback::where('url', $host)->first();
@@ -105,14 +109,14 @@ class UrlController extends Controller
                         'feedback' => $domain->feedback
                     ]
                 ];
-                $res = $client->get("flask/retrain",$params);
+                $res = $client->get("flask/retrain", $params);
                 $urlInfo = $domain->url($host);
                 if ($domain->feedback > 0 && !$urlInfo->isGood) {
                     $urlInfo->isGood = true;
                 } elseif ($domain->feedback < 0 && $urlInfo->isGood) {
                     $urlInfo->isGood = false;
                 }
-                
+
                 $domain->save();
                 $urlInfo->save();
             } else {
@@ -127,19 +131,19 @@ class UrlController extends Controller
                         'feedback' => $userFeedback->feedback
                     ]
                 ];
-                $urlInfo = Url::where("url",$host)->first();
-                if ( ! $urlInfo ) {
+                $urlInfo = Url::where("url", $host)->first();
+                if (!$urlInfo) {
                     $urlInfo = new Url();
                     $urlInfo->url = $host;
-                    if ( $feedback == 1 ) {
+                    if ($feedback == 1) {
                         $urlInfo->isGood = true;
                     } else {
                         $urlInfo->isGood = false;
                     }
                     $urlInfo->save();
                 }
-                $res = $client->get("flask/retrain",$params);
-                $location = json_decode($res->getBody()->getContents(),true)["location"];
+                $res = $client->get("flask/retrain", $params);
+                $location = json_decode($res->getBody()->getContents(), true)["location"];
                 $userFeedback->location = $location;
                 $userFeedback->save();
             }

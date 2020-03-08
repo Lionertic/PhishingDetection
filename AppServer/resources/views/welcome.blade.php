@@ -42,8 +42,8 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="positive" data-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-primary" id="negative" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-default" id="negative" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-primary" id="positive" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
