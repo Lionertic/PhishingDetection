@@ -16,7 +16,7 @@ class CreateTableUserFeedback extends Migration
         Schema::create('UserFeedback', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('url', 500)->unique();
-            $table->tinyInteger('feedback');
+            $table->tinyInteger('feedback')->default(0);
             $table->timestamps();
             $table->foreign("url")->references("url")->on("Urls")->onDelete("cascade");
         });

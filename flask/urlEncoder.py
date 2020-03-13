@@ -459,13 +459,21 @@ def statistical(url):
 
 
 def process(url):
-    ipUrl = urlLen = urlShortened = atSymbol = hasDoubleSlash = \
-        containsHyphen = containMoreSubDomain = isGoodSSL = domainReg = \
-        hasFavIcon = isPort = isHttps = inPageRequests = anchorUrls = \
-        linkTags = isSFH = isMailTo = isAbnormalUrl = isRedirected = \
-        isMouseOver = click = isPop = isIframe = domainAge = \
-        hasDNSRecord = traffic = goodPageRank = isPageIndexed = \
-        isLinks = isGoodStatistical = -1
+#     ipUrl = urlLen =  urlShortened =  atSymbol = hasDoubleSlash = \
+#     containsHyphen = containMoreSubDomain = isGoodSSL = domainReg = \
+#     hasFavIcon =  isPort =  isHttps = inPageRequests = anchorUrls = \
+#     linkTags =  isSFH =  isMailTo = isAbnormalUrl = isRedirected = \
+#     isMouseOver = click = isPop =  isIframe = domainAge = \
+#     hasDNSRecord =  traffic =  goodPageRank = isPageIndexed = \
+#     isLinks = isGoodStatistical =  -1
+
+    ipUrl = urlLen = atSymbol = \
+    hasDoubleSlash = containsHyphen = containMoreSubDomain = \
+    isGoodSSL = domainReg = hasFavIcon = \
+    isHttps = inPageRequests = anchorUrls = \
+    linkTags = isMailTo = isAbnormalUrl = \
+    isRedirected = isIframe = domainAge = \
+    hasDNSRecord =  goodPageRank = isPageIndexed =  -1
 
     try:
         resp = requests.get(url)
@@ -498,20 +506,20 @@ def process(url):
         isGoodSSL = sslState(isHttps, url)
         goodPageRank = pageRank(fullUrl)
         isPageIndexed = googleIndex(resp.url)
-        isPort = port(url)
-        urlShortened = urlShort(url)
-        isSFH = sfh(url)
-        isMouseOver = mouseOver(url)
-        click = rightClick(url)
-        isPop = popup(url)
-        traffic = webTraffic(url)
-        isLinks = linksPointing(url)
-        isGoodStatistical = statistical(url)
+        # isPort = port(url)
+        # urlShortened = urlShort(url)
+        # isSFH = sfh(url)
+        # isMouseOver = mouseOver(url)
+        # click = rightClick(url)
+        # isPop = popup(url)
+        # traffic = webTraffic(url)
+        # isLinks = linksPointing(url)
+        # isGoodStatistical = statistical(url)
 
         return [[
             ipUrl,
             urlLen,
-            urlShortened,
+            # urlShortened,
             atSymbol,
             hasDoubleSlash,
             containsHyphen,
@@ -519,32 +527,33 @@ def process(url):
             isGoodSSL,
             domainReg,
             hasFavIcon,
-            isPort,
+            # isPort,
             isHttps,
             inPageRequests,
             anchorUrls,
             linkTags,
-            isSFH,
+            # isSFH,
             isMailTo,
             isAbnormalUrl,
             isRedirected,
-            isMouseOver,
-            click,
-            isPop,
+            # isMouseOver,
+            # click,
+            # isPop,
             isIframe,
             domainAge,
             hasDNSRecord,
-            traffic,
+            # traffic,
             goodPageRank,
             isPageIndexed,
-            isLinks,
-            isGoodStatistical,
+            # isLinks,
+            # isGoodStatistical,
         ]]
     except Exception as e:
+        print(e)
         return [[
             ipUrl,
             urlLen,
-            urlShortened,
+            # urlShortened,
             atSymbol,
             hasDoubleSlash,
             containsHyphen,
@@ -552,24 +561,27 @@ def process(url):
             isGoodSSL,
             domainReg,
             hasFavIcon,
-            isPort,
+            # isPort,
             isHttps,
             inPageRequests,
             anchorUrls,
             linkTags,
-            isSFH,
+            # isSFH,
             isMailTo,
             isAbnormalUrl,
             isRedirected,
-            isMouseOver,
-            click,
-            isPop,
+            # isMouseOver,
+            # click,
+            # isPop,
             isIframe,
             domainAge,
             hasDNSRecord,
-            traffic,
+            # traffic,
             goodPageRank,
             isPageIndexed,
-            isLinks,
-            isGoodStatistical,
+            # isLinks,
+            # isGoodStatistical,
         ]]
+
+# print(process("google.com"))
+# print(process("https://storage.googleapis.com/g76rtoq78rtf98qgfowy8r9p8hof.appspot.com/h%20dfgr%2076t%20gr/d%20nbf%2087t%20gf"))

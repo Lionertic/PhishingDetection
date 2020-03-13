@@ -3,7 +3,7 @@ FROM ubuntu:latest
 LABEL maintainer="Lionertic"
 
 RUN apt-get update && \
-    apt-get -y --fix-missing install python3 wget gcc g++ firefox sudo apt python3-pip whois
+    apt-get -y --fix-missing install python3 gcc g++ sudo python3-pip whois
 
 COPY . /usr/src
 

@@ -13,3 +13,4 @@ whois
 favicon
 dnspython
 validators
+tensorflow==2.0
