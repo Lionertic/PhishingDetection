@@ -44,12 +44,23 @@ services:
     container_name: flask
     restart: always
     working_dir: /usr/src/flask
+    environment:
+      FLASK_CONFIG: development
+      FLASK_APP: run.py
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: root
     volumes:
       - ./:/usr/src/
-    expose:
-      - 80
+    ports:
+      - 5000:5000
     networks:
       - flaskConnector
+      - dbConnector
 
   #MySQL Service
   urls:
