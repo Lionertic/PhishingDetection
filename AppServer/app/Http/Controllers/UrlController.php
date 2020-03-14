@@ -19,9 +19,8 @@ class UrlController extends Controller
 
         $url = addScheme($url);
         $parsedUrl = parse_url($url);
-
         if (key_exists("host", $parsedUrl)) {
-            $host = $parsedUrl['host'];
+            $host = preg_replace('/^www\./', '', $parsedUrl['host']);
             if (isUrl($host)) {
                 $domain = Url::where('url', $host)->first();
                 if ($domain) {
@@ -108,7 +107,7 @@ class UrlController extends Controller
         $feedback = $request->feedback;
         $parsedUrl = parse_url($url);
         if (key_exists("host", $parsedUrl)) {
-            $host = $parsedUrl['host'];
+            $host = preg_replace('/^www\./', '', $parsedUrl['host']);
 
             $userFeedback = UserFeedback::where('url', $host)->first();
             if (!$userFeedback) {
