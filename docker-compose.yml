@@ -28,7 +28,7 @@ services:
     restart: always
     tty: true
     ports:
-      - "80:80"
+      - 80:80
     volumes:
       - ./:/var/www/html
       - ./nginx/:/etc/nginx/conf.d/
@@ -77,7 +77,7 @@ services:
     depends_on:
       - urls
     ports:
-      - "8183:80"
+      - 8183:80
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306

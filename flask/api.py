@@ -2,8 +2,10 @@ from flask import Flask, request
 from urlEncoder import process
 from functions import editRow, addRow, trainModel, predict
 import traceback
+from flask_apscheduler import APScheduler
 
 app = Flask(__name__)
+scheduler = APScheduler()
 
 @app.route("/check")
 def check():
@@ -61,6 +63,12 @@ def retrain():
         return data, 500
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=80)
+@scheduler.task('cron', id='training', minute="*")
+def training():
+    app.logger.info('Training starts')
     trainModel()
+
+if __name__ == "__main__":
+    trainModel()
+    scheduler.start()
+    app.run(host='0.0.0.0', debug=False, port=80)

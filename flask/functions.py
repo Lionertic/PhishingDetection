@@ -35,14 +35,12 @@ def addRow(encodedData):
     row = pd.DataFrame(encodedData,columns=columnList)
     df = df.append(row, ignore_index=True)
     df.to_csv("./data.csv", index=False)
-    trainModel()
     return df.tail(1).index.item()
 
 def editRow(feedback,pos):
     df = pd.read_csv("data.csv")
     df["target"].iloc[pos] = feedback
     df.to_csv("./data.csv", index=False)
-    trainModel()
 
 def predict(val):
     model = load_model("model.h5")
