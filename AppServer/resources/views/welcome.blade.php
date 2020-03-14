@@ -29,7 +29,7 @@
     </div>
     <!-- Button trigger modal -->
     <button type="button" class=" hidden btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal"></button>
-
+    <input type="hidden" id="response">
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -42,8 +42,8 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="negative" data-dismiss="modal">Yes</button>
-                    <button type="button" class="btn btn-primary" id="positive" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-default" id="positive" data-dismiss="modal">Correct</button>
+                    <button type="button" class="btn btn-primary" id="negative" data-dismiss="modal">Wrong</button>
                 </div>
             </div>
         </div>

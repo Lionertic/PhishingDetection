@@ -23,9 +23,7 @@ class UrlController extends Controller
         if (key_exists("host", $parsedUrl)) {
             $host = $parsedUrl['host'];
             if (isUrl($host)) {
-
                 $domain = Url::where('url', $host)->first();
-
                 if ($domain) {
                     if ($domain->isGood) {
                         return response()->json(['status' => 1, 'message' => 'Url is fine'], 200);
@@ -126,14 +124,16 @@ class UrlController extends Controller
             }
 
             $userFeedback->feedback += $feedback;
-            $urlInfo->feedback = $feedback > 0;
+            $urlInfo->isGood = $userFeedback->feedback > 0;
 
             $client = new Client();
+            $isGood = $userFeedback->feedback > 0 ? 1 : -1;
+
             $params = [
                 'query' => [
                     'url' => $url,
                     'loc' => $userFeedback->location,
-                    'feedback' => $userFeedback->feedback
+                    'feedback' => $isGood
                 ]
             ];
 
@@ -145,8 +145,8 @@ class UrlController extends Controller
                 } else {
                     return response()->json(['status' => 0, 'message' => 'Flask error'], 500);
                 }
-                $userFeedback->save();
                 $urlInfo->save();
+                $userFeedback->save();
                 return response()->json(['status' => 1, 'message' => 'Thanks for feedback'], 200);
             } catch (ClientException $exception) {
                 return response()->json(['status' => 0, 'message' => 'Flask error'], 500);

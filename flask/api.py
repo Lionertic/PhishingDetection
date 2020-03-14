@@ -35,15 +35,11 @@ def retrain():
         loc = int(request.args.get("loc"))
         feedback = int(request.args.get("feedback"))
 
-        if feedback == 0:
-            feedback = 1
-
         data = {}
         if loc == -1:
             app.logger.info(url)
             val = process(url)
             app.logger.info(val)
-
 #             feedback =  feedback + int(predict(val))
             val[0].append(feedback)
             loc = addRow(val)
@@ -63,7 +59,7 @@ def retrain():
         return data, 500
 
 
-@scheduler.task('cron', id='training', minute="*")
+@scheduler.task('cron', id='training', hour=0, minute=0, second=0)
 def training():
     app.logger.info('Training starts')
     trainModel()

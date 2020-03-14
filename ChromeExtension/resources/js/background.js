@@ -12,7 +12,7 @@ chrome.tabs.onUpdated.addListener( function (tabId, changeInfo, tab) {
             dataType: "json",
             crossDomain: true,
             success: function (data, status, jqXHR) {
-                if (data.message !== "Its good url") {
+                if (data.status === -1) {
                     alert("error " + data.message);
                 }
             },

@@ -27,13 +27,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 dataType: "json",
                 crossDomain: true,
                 success: function (data, status, jqXHR) {
-                    if (status === "success") {
+                    if (data.status !== 0) {
                         $this.removeClass('loader active');
                         $this.text('Success');
                         $this.addClass('success animated pulse');
                         $(".modal-body").html(data.message + "\n Please provide feedback");
                         $(".hidden").click();
-                        $("#resp").append("error " + data.message)
+                        $("#response").val(data.status);
+                        setTimeout(() => {
+                            $this.text('Go');
+                            $this.removeClass('success animated pulse');
+                            $this.blur();
+                        }, 500);
                     } else {
                         $this.removeClass('loader active');
                         $this.text('Error');
@@ -58,30 +63,39 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
     var bkg = chrome.extension.getBackgroundPage();
     bkg.console.log($("#positive"));
-    $("#positive").click(() => {
-        feedback(outerUrl, 1)
-    });
 
     $("#negative").click(() => {
-        feedback(outerUrl, -1)
-    });
-}, false);
+        var url = $("input").val();
+        url = url.replace(".", "%2E");
+        resp = $("#response").val();
+        feedback = resp === "-1" ? 1 : -1;
 
-function feedback(url, feedback) {
-    window.close();
-    $.ajax({
-        url: "http://localhost/api/feedback?url=" + url + "&feedback=" + feedback,
-        type: "GET",
-        contentType: "application/json",
-        timeout: 20000,
-        accepts: "application/json",
-        dataType: "json",
-        crossDomain: true,
-        success: function (data, status, jqXHR) {
-        },
-        error: function (jqXHR, status) {
+        $.ajax({
+            url: "http://localhost/api/feedback?url=" + url + "&feedback=" + feedback,
+            type: "GET",
+            contentType: "application/json",
+            timeout: 20000,
+            accepts: "application/json",
+            dataType: "json",
+            crossDomain: true,
+            success: function (data, status, jqXHR) {
+                bkg.console.log(data);
+                window.close();
+            },
+            error: function (jqXHR, status) {
+                bkg.console.log(jqXHR);
+                window.close();
+            }
+        });
+    });
+
+    $(document).keypress((event) => {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode === '13') {
+            $("#check").click();
         }
     });
-}
+}, false);
