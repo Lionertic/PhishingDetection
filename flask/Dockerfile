@@ -9,10 +9,6 @@ COPY . /usr/src
 
 WORKDIR /usr/src/flask
 
-RUN chmod +x /usr/src/flask/geckodriver
-
-RUN cp /usr/src/flask/geckodriver /usr/local/bin
-
 RUN pip3 install --upgrade pip
 
 RUN pip3 install -r requirements.txt

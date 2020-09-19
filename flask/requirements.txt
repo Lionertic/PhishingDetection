@@ -10,7 +10,7 @@ seaborn
 regex
 tldextract
 bs4
-whois
+python-whois
 favicon
 dnspython
 validators

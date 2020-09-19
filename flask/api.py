@@ -1,11 +1,13 @@
-from flask import Flask, request
-from urlEncoder import process
-from functions import editRow, addRow, trainModel, predict
 import traceback
 from flask_apscheduler import APScheduler
+from functions import editRow, addRow, trainModel, predict
+from urlEncoder import process
+
+from flask import Flask, request
 
 app = Flask(__name__)
 scheduler = APScheduler()
+
 
 @app.route("/check")
 def check():
@@ -15,9 +17,8 @@ def check():
             raise Exception("Wrong url")
 
         val = process(url)
-        data = {}
-        data["status"] = str(predict(val))
-        return data, 200
+
+        return {"status": str(predict(val))}, 200
 
     except Exception as e:
         return {"status": -2}, 500
@@ -37,17 +38,10 @@ def retrain():
         else:
             editRow(feedback, loc)
 
-        data = {}
-        data['status'] = 1
-        data['message'] = 'Retrained'
-        data["location"] = loc
-        return data, 200
+        return {'status': 1, 'message': 'Retrained', "location": loc}, 200
 
     except Exception as e:
-        l = traceback.format_exc()
-        data = {}
-        data['status'] = 0
-        data['message'] = l
+        data = {'status': 0, 'message': traceback.format_exc()}
         return data, 500
 
 
@@ -56,10 +50,6 @@ def training():
     app.logger.info('Training starts')
     trainModel()
 
-# # @scheduler.task('interval', id='do_job_1', seconds=30)
-# def chcel():
-#     print(scheduler.get_job("training"))
-#     app.logger.info(scheduler.get_job("training"))
 
 if __name__ == "__main__" :
     trainModel()

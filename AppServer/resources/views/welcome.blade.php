@@ -7,13 +7,13 @@
     <title>Phishing Detector</title>
 
     <!-- Fonts -->
-    <link rel="icon" href="{{ secure_asset('favicon.png') }}" type="image/x-icon"/>
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link href="{{ secure_asset('/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/style.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -50,5 +50,5 @@
     </div>
 </div>
 </body>
-<script src="{{ secure_asset('/js/script.js') }}"></script>
+<script src="{{ asset('/js/script.js') }}"></script>
 </html>

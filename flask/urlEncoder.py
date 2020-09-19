@@ -1,18 +1,16 @@
-import regex
-from tldextract import extract
-import ssl
-import socket
-from bs4 import BeautifulSoup
-import whois
-import favicon
-import dns.resolver as resolver
-from bs4 import BeautifulSoup
-from urllib.parse import urlencode
-import tldextract
-import requests
-import json
-import validators
 import datetime
+import favicon
+import json
+import regex
+import requests
+import socket
+import ssl
+import tldextract
+import validators
+import whois
+from bs4 import BeautifulSoup
+from tldextract import extract
+from urllib.parse import urlencode
 
 
 def urlHavingIp(url):
@@ -213,7 +211,6 @@ def abnormalUrl(soup, orgDomain):
         else:
             return 1
     except:
-
         return -1
 
 
@@ -234,7 +231,6 @@ def iframe(soup):
         else:
             return 1
     except:
-
         return -1
 
 
@@ -256,6 +252,7 @@ def redirect(resp, url):
             return -1
     except:
         return -1
+
 
 def faviconCheck(url):
     try:
@@ -369,6 +366,7 @@ def sslState(useHttps, url):
         # print(e)
         return -1
 
+
 def pageRank(url):
     try:
         response = requests.get('https://openpagerank.com/api/v1.0/getPageRank?domains%5B0%5D=' + url,
@@ -480,7 +478,7 @@ def process(url):
         soup = BeautifulSoup(resp.content, 'html.parser')
         subDomain, domain, suffix = extract(resp.url)
         fullUrl = subDomain + '.' + domain + '.' + suffix
-        w = whois.query(fullUrl).__dict__
+        w = whois.whois(fullUrl)
         ipUrl = urlHavingIp(resp.url)
         atSymbol = havingAtSymbol(resp.url)
         urlLen = urlLength(resp.url)
@@ -488,7 +486,7 @@ def process(url):
         containsHyphen = prefixDomain(domain)
         containMoreSubDomain = subDomainCheck(subDomain)
         isRedirected = redirect(resp, url)
-        if ( isRedirected == -1 ) :
+        if isRedirected == -1:
             isHttps = httpsToken(url)
         else:
             isHttps = httpsToken(fullUrl)
@@ -583,5 +581,5 @@ def process(url):
             # isGoodStatistical,
         ]]
 
-# print(process("google.com"))
+# print(process("http://google.com"))
 # print(process("https://storage.googleapis.com/g76rtoq78rtf98qgfowy8r9p8hof.appspot.com/h%20dfgr%2076t%20gr/d%20nbf%2087t%20gf"))
