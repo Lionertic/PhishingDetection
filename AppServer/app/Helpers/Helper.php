@@ -6,7 +6,12 @@ function isUrl($url) {
       if(preg_match("/^$regex$/", $url)) { 
             return true; 
       } else {
-            return false;
+            $regex = "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}";
+            if(preg_match("/^$regex$/", $url)) { 
+                  return true; 
+            } else {
+                  return false;
+            }
       }
 }
 function addScheme($url, $scheme = 'http://'){
