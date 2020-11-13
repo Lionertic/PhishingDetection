@@ -14,4 +14,4 @@ python-whois
 favicon
 dnspython
 validators
-tensorflow==2.0
+tensorflow==2.3.1
